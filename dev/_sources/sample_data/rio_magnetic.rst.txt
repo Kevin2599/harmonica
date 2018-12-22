@@ -1,0 +1,171 @@
+.. note::
+    :class: sphx-glr-download-link-note
+
+    Click :ref:`here <sphx_glr_download_sample_data_rio_magnetic.py>` to download the full example code
+.. rst-class:: sphx-glr-example-title
+
+.. _sphx_glr_sample_data_rio_magnetic.py:
+
+
+Total Field Magnetic Anomaly from Rio de Janeiro
+================================================
+
+A subsection from an airborne survey of the state of Rio de Janeiro, Brazil, conducted
+in 1978. The data are stored in a :class:`pandas.DataFrame` with columns: longitude,
+latitude, total field anomaly (nanoTesla), observation height above the WGS84 ellipsoid
+(meters), type of flight line (LINE or TIE), and flight line number. See the
+documentation for :func:`harmonica.datasets.fetch_rio_magnetic` for more information.
+
+
+
+
+.. image:: /sample_data/images/sphx_glr_rio_magnetic_001.png
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    longitude   latitude     ...       line_type  line_number
+    0     -43.197281 -22.050690     ...            LINE         1680
+    1     -43.197281 -22.051575     ...            LINE         1680
+    2     -43.197266 -22.052460     ...            LINE         1680
+    3     -43.197266 -22.053329     ...            LINE         1680
+    4     -43.197266 -22.054199     ...            LINE         1680
+    5     -43.197250 -22.055084     ...            LINE         1680
+    6     -43.197250 -22.055969     ...            LINE         1680
+    7     -43.197235 -22.056839     ...            LINE         1680
+    8     -43.197235 -22.057724     ...            LINE         1680
+    9     -43.197235 -22.058609     ...            LINE         1680
+    10    -43.197220 -22.059479     ...            LINE         1680
+    11    -43.197220 -22.060349     ...            LINE         1680
+    12    -43.197220 -22.061234     ...            LINE         1680
+    13    -43.197205 -22.062119     ...            LINE         1680
+    14    -43.197205 -22.062988     ...            LINE         1680
+    15    -43.197205 -22.063873     ...            LINE         1680
+    16    -43.197189 -22.064743     ...            LINE         1680
+    17    -43.197189 -22.065628     ...            LINE         1680
+    18    -43.197189 -22.066513     ...            LINE         1680
+    19    -43.197174 -22.067383     ...            LINE         1680
+    20    -43.197174 -22.068253     ...            LINE         1680
+    21    -43.197159 -22.069138     ...            LINE         1680
+    22    -43.197159 -22.070023     ...            LINE         1680
+    23    -43.197159 -22.070892     ...            LINE         1680
+    24    -43.197144 -22.071777     ...            LINE         1680
+    25    -43.197144 -22.072647     ...            LINE         1680
+    26    -43.197144 -22.073532     ...            LINE         1680
+    27    -43.197128 -22.074432     ...            LINE         1680
+    28    -43.197098 -22.075333     ...            LINE         1680
+    29    -43.197083 -22.076233     ...            LINE         1680
+    ...          ...        ...     ...             ...          ...
+    81766 -41.999207 -22.073608     ...             TIE         9600
+    81767 -42.000168 -22.073624     ...             TIE         9600
+    81768 -42.001144 -22.073624     ...             TIE         9600
+    81769 -42.002106 -22.073624     ...             TIE         9600
+    81770 -42.003082 -22.073639     ...             TIE         9600
+    81771 -42.004044 -22.073654     ...             TIE         9600
+    81772 -42.005020 -22.073654     ...             TIE         9600
+    81773 -42.005997 -22.073654     ...             TIE         9600
+    81774 -42.006958 -22.073669     ...             TIE         9600
+    81775 -42.007935 -22.073669     ...             TIE         9600
+    81776 -42.008911 -22.073669     ...             TIE         9600
+    81777 -42.009872 -22.073685     ...             TIE         9600
+    81778 -42.010849 -22.073685     ...             TIE         9600
+    81779 -42.011826 -22.073700     ...             TIE         9600
+    81780 -42.012802 -22.073700     ...             TIE         9600
+    81781 -42.013779 -22.073715     ...             TIE         9600
+    81782 -42.014740 -22.073715     ...             TIE         9600
+    81783 -42.015717 -22.073715     ...             TIE         9600
+    81784 -42.016693 -22.073730     ...             TIE         9600
+    81785 -42.017670 -22.073730     ...             TIE         9600
+    81786 -42.018646 -22.073746     ...             TIE         9600
+    81787 -42.019608 -22.073746     ...             TIE         9600
+    81788 -42.020584 -22.073746     ...             TIE         9600
+    81789 -42.021576 -22.073761     ...             TIE         9600
+    81790 -42.022552 -22.073761     ...             TIE         9600
+    81791 -42.023544 -22.073761     ...             TIE         9600
+    81792 -42.024536 -22.073776     ...             TIE         9600
+    81793 -42.025513 -22.073776     ...             TIE         9600
+    81794 -42.026505 -22.073776     ...             TIE         9600
+    81795 -42.027496 -22.073776     ...             TIE         9600
+
+    [81796 rows x 6 columns]
+
+
+
+
+|
+
+
+.. code-block:: python
+
+    import matplotlib.pyplot as plt
+    import cartopy.crs as ccrs
+    import verde as vd
+    import harmonica as hm
+
+    # Fetch the data in a pandas.DataFrame
+    data = hm.datasets.fetch_rio_magnetic()
+    print(data)
+
+    # Plot the observations in a Mercator map using Cartopy
+    fig = plt.figure(figsize=(10, 6))
+    ax = plt.axes(projection=ccrs.Mercator())
+    ax.set_title("Magnetic data from Rio de Janeiro", pad=25)
+    maxabs = vd.maxabs(data.total_field_anomaly_nt)
+    tmp = ax.scatter(
+        data.longitude,
+        data.latitude,
+        c=data.total_field_anomaly_nt,
+        s=0.8,
+        cmap="seismic",
+        vmin=-maxabs,
+        vmax=maxabs,
+        transform=ccrs.PlateCarree(),
+    )
+    plt.colorbar(
+        tmp,
+        ax=ax,
+        label="total field magnetic anomaly [nT]",
+        orientation="horizontal",
+        aspect=50,
+        shrink=0.7,
+        pad=0.06,
+    )
+    ax.set_extent(vd.get_region((data.longitude, data.latitude)))
+    ax.gridlines(draw_labels=True)
+    plt.tight_layout()
+    plt.show()
+
+**Total running time of the script:** ( 0 minutes  0.799 seconds)
+
+
+.. _sphx_glr_download_sample_data_rio_magnetic.py:
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Python source code: rio_magnetic.py <rio_magnetic.py>`
+
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Jupyter notebook: rio_magnetic.ipynb <rio_magnetic.ipynb>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.readthedocs.io>`_
